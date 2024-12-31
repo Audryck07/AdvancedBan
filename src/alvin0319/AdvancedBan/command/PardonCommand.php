@@ -14,39 +14,39 @@ use function array_shift;
 use function count;
 use function json_decode;
 
-final class PardonCommand extends Command implements PluginOwned{
-	use PluginOwnedTrait;
+final class PardonCommand extends Command implements PluginOwned {
+    use PluginOwnedTrait;
 
-	public function __construct(){
-		parent::__construct("pardon", "Pardon a player");
-		$this->setPermission("advancedban.command.pardon");
-	}
+    public function __construct() {
+        parent::__construct("pardon", "Pardonner un joueur");
+        $this->setPermission("advancedban.command.pardon");
+    }
 
-	public function execute(CommandSender $sender, string $commandLabel, array $args) : void{
-		if(!$this->testPermission($sender)){
-			return;
-		}
-		if(count($args) < 1){
-			$sender->sendMessage(Loader::$prefix . "Usage: /pardon <player>");
-			return;
-		}
-		$player = array_shift($args);
-		Await::f2c(function() use ($player, $sender) : \Generator{
-			$data = yield from Loader::getDatabase()->getSession($player);
-			if(count($data) > 0){
-				if(yield from Loader::getInstance()->isBannedName($player)){
-					yield from Loader::getDatabase()->pardonName($player);
-				}
-				$deviceIds = json_decode($data[0]["deviceIds"], true);
-				foreach($deviceIds as $deviceId){
-					if(yield from Loader::getInstance()->isBannedDevice($deviceId)){
-						yield from Loader::getDatabase()->pardonDevice($deviceId);
-					}
-				}
-				$sender->sendMessage(Loader::$prefix . "Pardoned player $player.");
-			}else{
-				$sender->sendMessage(Loader::$prefix . "Player not found.");
-			}
-		});
-	}
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void {
+        if (!$this->testPermission($sender)) {
+            return;
+        }
+        if (count($args) < 1) {
+            $sender->sendMessage(Loader::$prefix . "Utilisation : /pardon <joueur>");
+            return;
+        }
+        $player = array_shift($args);
+        Await::f2c(function () use ($player, $sender): \Generator {
+            $data = yield from Loader::getDatabase()->getSession($player);
+            if (count($data) > 0) {
+                if (yield from Loader::getInstance()->isBannedName($player)) {
+                    yield from Loader::getDatabase()->pardonName($player);
+                }
+                $deviceIds = json_decode($data[0]["deviceIds"], true);
+                foreach ($deviceIds as $deviceId) {
+                    if (yield from Loader::getInstance()->isBannedDevice($deviceId)) {
+                        yield from Loader::getDatabase()->pardonDevice($deviceId);
+                    }
+                }
+                $sender->sendMessage(Loader::$prefix . "Le joueur $player a été pardonné.");
+            } else {
+                $sender->sendMessage(Loader::$prefix . "Joueur introuvable.");
+            }
+        });
+    }
 }
