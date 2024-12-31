@@ -3,7 +3,7 @@ Un plugin avancé pour PocketMine-MP permettant de bannir les joueurs par leur n
 
 # Fonctionnalités
  - Bannir les joueurs par leur nom.
- - Bannir les joueurs par identifiant de périphérique.
+ - Bannir les joueurs par ID.
  - Support de base de données MySQL.
 # Attention
 Ce plugin remplace les commandes de bannissement et de pardon intégrées de PocketMine.
