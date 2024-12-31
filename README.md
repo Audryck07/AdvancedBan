@@ -1,11 +1,11 @@
-# AdvancedBan
-An advanced PocketMine-MP plugin to ban players by name, device ID.
+#AdvancedBan (Version française)
+Un plugin avancé pour PocketMine-MP permettant de bannir les joueurs par leur nom ou identifiant de périphérique.
 
-# Features
-- [x] Ban players by name.
-- [x] Ban players by device ID.
-- [x] MySQL database support.
-- [x] SQLite database support.
+#Fonctionnalités
+ - Bannir les joueurs par leur nom.
+ - Bannir les joueurs par identifiant de périphérique.
+ - Support de base de données MySQL.
+#Attention
+Ce plugin remplace les commandes de bannissement et de pardon intégrées de PocketMine.
 
-# Warning
-This plugin replaces PocketMine's built-in ban and pardon command.
+Remarque : Cette version est une copie française du plugin AdvancedBan.
