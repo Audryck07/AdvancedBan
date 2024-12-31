@@ -27,7 +27,7 @@ final class BanCommand extends Command implements PluginOwned{
 	use PluginOwnedTrait;
 
 	public function __construct(){
-		parent::__construct("ban", "Ban a player");
+		parent::__construct("ban", "Bannir un joueur");
 		$this->setPermission("advancedban.command.ban");
 	}
 
@@ -36,7 +36,7 @@ final class BanCommand extends Command implements PluginOwned{
 			return;
 		}
 		if(count($args) < 2){
-			$sender->sendMessage(Loader::$prefix . "Usage: /ban <player> <reason> [date]");
+			$sender->sendMessage(Loader::$prefix . "Usage : /ban <joueur> <raison> [date]");
 			return;
 		}
 		[$player, $reason] = $args;
@@ -47,12 +47,12 @@ final class BanCommand extends Command implements PluginOwned{
 			try{
 				$date = $this->parseDate(array_shift($args));
 			}catch(\InvalidArgumentException $e){
-				$sender->sendMessage(Loader::$prefix . "Failed to parse date: {$e->getMessage()}");
+				$sender->sendMessage(Loader::$prefix . "Impossible d'analyser la date : {$e->getMessage()}");
 			}
 		}
 		Await::f2c(function() use ($sender, $player, $reason, $date) : \Generator{
 			if(yield from Loader::getInstance()->isBannedName($player)){
-				$sender->sendMessage(Loader::$prefix . "Player is already banned.");
+				$sender->sendMessage(Loader::$prefix . "Le joueur est déjà banni.");
 				return;
 			}
 			$deviceIds = yield from Loader::getDatabase()->getSession($player);
@@ -64,10 +64,10 @@ final class BanCommand extends Command implements PluginOwned{
 			foreach(json_decode($deviceIds[0]["deviceIds"]) as $deviceId){
 				yield from Loader::getDatabase()->banDevice($deviceId, $date?->getTimestamp() ?? -1, $reason, $sender->getName());
 			}
-			$sender->sendMessage(Loader::$prefix . "Banned player {$player}. Reason: {$reason}");
+			$sender->sendMessage(Loader::$prefix . "Le joueur {$player} a été banni. Raison : {$reason}");
 			$this->kickMatchPlayer($player);
 			if(($target = $sender->getServer()->getPlayerExact($player)) !== null){
-				$target->kick(Loader::$prefix . "Banned by {$sender->getName()}. Reason: {$reason}");
+				$target->kick(Loader::$prefix . "Banni par {$sender->getName()}. Raison : {$reason}");
 			}
 		});
 	}
@@ -102,7 +102,7 @@ final class BanCommand extends Command implements PluginOwned{
 						$sec = (int) $tempStr;
 						break;
 					default:
-						throw new \InvalidArgumentException("Unexpected identifier $str, expected one of " . implode(", ", $allowed));
+						throw new \InvalidArgumentException("Identifiant inattendu $str, attendu l'un de " . implode(", ", $allowed));
 				}
 			}
 		}
@@ -118,7 +118,7 @@ final class BanCommand extends Command implements PluginOwned{
 				if(count($data) > 0){
 					$playerDeviceIds = json_decode($data[0]["deviceIds"]);
 					if(count(array_intersect($playerDeviceIds, $deviceIds)) > 0){
-						$player->kick("You have been banned.");
+						$player->kick("Vous avez été banni.");
 					}
 				}
 			}
