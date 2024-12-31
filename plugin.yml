@@ -1,5 +1,5 @@
-name: AdvancedBan
-author: alvin0319
+name: RedBan
+author: Audryck
 main: alvin0319\AdvancedBan\Loader
 version: 1.0.0
 api: 4.0.0
